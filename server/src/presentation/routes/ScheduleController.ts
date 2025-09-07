@@ -1,17 +1,12 @@
-import express from "express";
 import type { Request, Response } from "express";
-import { container, inject, injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import { GetScheduleUseCase } from "../../domain/usecases/GetScheduleUseCase.ts";
 
 @injectable()
 class ScheduleController {
-    private getScheduleUseCase: GetScheduleUseCase;
-
     constructor(
-        @inject(GetScheduleUseCase) getScheduleUseCase: GetScheduleUseCase
-    ) {
-        this.getScheduleUseCase = getScheduleUseCase;
-    }
+        @inject(GetScheduleUseCase) private getScheduleUseCase: GetScheduleUseCase
+    ) {}
 
     public async getSchedue(req: Request, res: Response) {
         const groupName = req.params.groupName?.toString() ?? "Группа отсутствует :(";

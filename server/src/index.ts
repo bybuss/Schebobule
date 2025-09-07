@@ -1,7 +1,7 @@
-import express from "express";
 import "reflect-metadata";
-import type { Request, Response } from "express";
+import express from "express";
 import { container } from "tsyringe";
+import type { Request, Response } from "express";
 import ScheduleController from "./presentation/routes/ScheduleController.ts";
 import { GetScheduleUseCase } from "./domain/usecases/GetScheduleUseCase.ts";
 import { ScheduleRepositoryImpl } from "./data/repositories/ScheduleRepository.ts";
@@ -11,6 +11,7 @@ const PORT = 5000;
 
 container.registerSingleton("ScheduleRepository", ScheduleRepositoryImpl); 
 container.registerSingleton(GetScheduleUseCase, GetScheduleUseCase);
+container.registerSingleton(ScheduleController, ScheduleController);
 
 const router = express.Router();
 const scheduleController = container.resolve(ScheduleController);
