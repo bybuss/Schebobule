@@ -1,0 +1,38 @@
+import type { Request, Response } from "express";
+import { inject, injectable } from "tsyringe";
+import { LoginUserUseCase } from "src/domain/usecases/LoginUserUseCase";
+import { RegisterUserUseCase } from "src/domain/usecases/RegisterUserUseCase";
+
+@injectable()
+class AuthController {
+    constructor(
+        @inject(LoginUserUseCase) private loginUseCase: LoginUserUseCase,
+        @inject(RegisterUserUseCase) private registerUserUseCase: RegisterUserUseCase
+    ) {}
+
+    async login(req: Request, res: Response): Promise<void> {
+        const { email, password } = req.body;
+
+        const token = await this.loginUseCase.execute(email, password);
+        if (!token) {
+            res.status(401).json({ message: "Invalid credentials" });
+            return;
+        }
+
+        res.json({ token });
+    }
+
+    async register(req: Request, res: Response): Promise<void> {
+        const { email, password } = req.body;
+
+        const token = await this.registerUserUseCase.execute(email, password);
+        if (!token) {
+            res.status(400).json({ message: "User already exists" });
+            return;
+        }
+
+        res.json({ token });
+    }
+}
+
+export default AuthController;

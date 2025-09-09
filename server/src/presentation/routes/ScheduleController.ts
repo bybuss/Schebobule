@@ -8,7 +8,7 @@ class ScheduleController {
         @inject(GetScheduleUseCase) private getScheduleUseCase: GetScheduleUseCase
     ) {}
 
-    public async getSchedue(req: Request, res: Response) {
+    async getSchedue(req: Request, res: Response) {
         const groupName = req.params.groupName?.toString() ?? "Группа отсутствует :(";
 
         try {
