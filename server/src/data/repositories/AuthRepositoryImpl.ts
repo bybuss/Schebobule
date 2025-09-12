@@ -16,7 +16,6 @@ export class AuthRepositoryImpl implements AuthRepository {
         if (!user) return null;
 
         console.log(`Authenticating user with email: ${email}`);
-        console.log(`Password received: ${password}`);
         console.log(`Stored password hash: ${user.passwordhash}`);
 
         const isValid = await bcrypt.compare(password, user.passwordhash);
