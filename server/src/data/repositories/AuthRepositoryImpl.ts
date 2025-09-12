@@ -15,7 +15,11 @@ export class AuthRepositoryImpl implements AuthRepository {
         const user = await this.userDao.findByEmail(email);
         if (!user) return null;
 
-        const isValid = await bcrypt.compare(password, user.passwordHash);
+        console.log(`Authenticating user with email: ${email}`);
+        console.log(`Password received: ${password}`);
+        console.log(`Stored password hash: ${user.passwordhash}`);
+
+        const isValid = await bcrypt.compare(password, user.passwordhash);
         if (!isValid) return null;
 
         const token = jwt.sign({ userId: user.id, email: user.email }, "secretKey", { expiresIn: "1h" });
@@ -26,8 +30,8 @@ export class AuthRepositoryImpl implements AuthRepository {
         const existingUser = await this.userDao.findByEmail(email);
         if (existingUser) return null;
 
-        const passwordHash = await bcrypt.hash(password, 10);
-        const newUser = await this.userDao.create(email, passwordHash);
+        const passwordhash = await bcrypt.hash(password, 10);
+        const newUser = await this.userDao.create(email, passwordhash);
 
         const token = jwt.sign({ userId: newUser.id, email: newUser.email }, "secretKey", { expiresIn: "1h" });
         return token;
