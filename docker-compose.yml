@@ -1,0 +1,38 @@
+version: "3.8"
+
+services: 
+
+    db:
+        image: postgres:latest
+        container_name: database
+        environment:
+            DB_USER: ${DB_USER}
+            DB_PASSWORD: ${DB_PASSWORD}
+            DB_NAME: ${DB_NAME}
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+        env_file:
+            - ./server/.env
+
+    server:
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        container_name: server
+        environment:
+            DB_HOST: db
+            DB_PORT: 5432
+        ports:
+            - "5000:5000"
+        depends_on:
+            - db
+        volumes:
+            - ./server:/server
+        env_file:
+            - ./server/.env
+
+volumes:
+  postgres_data:
+    driver: local
