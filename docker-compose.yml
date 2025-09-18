@@ -6,9 +6,9 @@ services:
         image: postgres:latest
         container_name: database
         environment:
-            DB_USER: ${DB_USER}
-            DB_PASSWORD: ${DB_PASSWORD}
-            DB_NAME: ${DB_NAME}
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_DB: ${DB_NAME}
         volumes:
             - postgres_data:/var/lib/postgresql/data
         ports:
@@ -24,6 +24,7 @@ services:
         environment:
             DB_HOST: db
             DB_PORT: 5432
+            DB_NAME: ${DB_NAME}
         ports:
             - "5000:5000"
         depends_on:
