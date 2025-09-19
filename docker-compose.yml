@@ -24,7 +24,6 @@ services:
         environment:
             DB_HOST: db
             DB_PORT: 5432
-            DB_NAME: ${DB_NAME}
         ports:
             - "5000:5000"
         depends_on:

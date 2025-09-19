@@ -2,15 +2,17 @@ import "reflect-metadata";
 import express from "express";
 import { container } from "tsyringe";
 import type { Request, Response } from "express";
-import ScheduleController from "./presentation/routes/ScheduleController.ts";
+import ScheduleController from "./presentation/controllers/ScheduleController.ts";
 import { GetScheduleUseCase } from "./domain/usecases/GetScheduleUseCase.ts";
 import { ScheduleRepositoryImpl } from "./data/repositories/ScheduleRepository.ts";
 import { pool } from "./common/connection.ts";
 import knex from 'knex';
 import dotenv from 'dotenv';
 import { UserDao } from "./data/dao/UserDao.ts";
-import AuthController from "./presentation/routes/AuthController.ts";
+import AuthController from "./presentation/controllers/AuthController.ts";
 import { AuthRepositoryImpl } from "./data/repositories/AuthRepositoryImpl.ts";
+import { authenticateToken } from "./middleware/authenticateToken";
+import { isAdmin } from "./middleware/isAdmin";
 
 dotenv.config();
 
@@ -43,6 +45,7 @@ const authController = container.resolve(AuthController);
 
 router.get("/schedule/:groupName", scheduleController.getSchedue.bind(scheduleController));
 
+
 app.get("/", (req: Request, res, Response) => {
   res.send("SKEBOB!!");
 });
@@ -52,6 +55,9 @@ app.use(express.json());
 app.use("/api", router);
 app.post("/login", authController.login.bind(authController));
 app.post("/register", authController.register.bind(authController));
+app.post('/schedule', authenticateToken, isAdmin, (req: Request, res: Response) => {
+  res.send("YOU ARE ADMIN!!");
+});
 
 db.migrate.latest()
   .then(() => {

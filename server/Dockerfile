@@ -7,6 +7,6 @@ RUN npm install
 
 COPY . .
 
-CMD ["npm", "run", "dev"]
+CMD npx knex migrate:latest --knexfile ./knexfile.cjs && npm run dev
 
 EXPOSE 5000

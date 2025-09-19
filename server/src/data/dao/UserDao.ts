@@ -20,10 +20,10 @@ export class UserDao {
         return result.rows.length > 0 ? result.rows[0] as User : null;
     }
 
-    async create(email: string, passwordHash: string): Promise<User> {
+    async create(email: string, passwordHash: string, isAdmin: boolean = false): Promise<User> {
         const result = await this.pool.query(
-            'INSERT INTO users (email, passwordHash) VALUES ($1, $2) RETURNING *',
-            [email, passwordHash]
+            'INSERT INTO users (email, passwordhash, isAdmin) VALUES ($1, $2, $3) RETURNING *',
+            [email, passwordHash, isAdmin]
         );
         return result.rows[0];
     }

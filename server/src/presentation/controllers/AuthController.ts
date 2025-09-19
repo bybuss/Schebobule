@@ -16,6 +16,7 @@ class AuthController {
         console.log(`Login attempt with email: ${email}, password: ${password}`);
 
         const token = await this.loginUseCase.execute(email, password);
+
         if (!token) {
             res.status(401).json({ message: "Invalid credentials" });
             return;
@@ -28,6 +29,7 @@ class AuthController {
         const { email, password } = req.body;
 
         const token = await this.registerUserUseCase.execute(email, password);
+        
         if (!token) {
             res.status(400).json({ message: "User already exists" });
             return;

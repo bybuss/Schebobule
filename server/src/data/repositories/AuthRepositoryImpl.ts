@@ -21,7 +21,11 @@ export class AuthRepositoryImpl implements AuthRepository {
         const isValid = await bcrypt.compare(password, user.passwordhash);
         if (!isValid) return null;
 
-        const token = jwt.sign({ userId: user.id, email: user.email }, "secretKey", { expiresIn: "1h" });
+        const token = jwt.sign(
+            { userId: user.id, email: user.email, isAdmin: user.isAdmin },
+            "secretKey",
+            { expiresIn: "1h" },
+        );
         return token;
     }
 
@@ -32,7 +36,11 @@ export class AuthRepositoryImpl implements AuthRepository {
         const passwordhash = await bcrypt.hash(password, 10);
         const newUser = await this.userDao.create(email, passwordhash);
 
-        const token = jwt.sign({ userId: newUser.id, email: newUser.email }, "secretKey", { expiresIn: "1h" });
+        const token = jwt.sign(
+            { userId: newUser.id, email: newUser.email, isAdmin: newUser.isAdmin },
+            "secretKey",
+            { expiresIn: "1h" },
+        );
         return token;
     }
 }
