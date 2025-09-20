@@ -4,12 +4,10 @@ exports.up = function(knex) {
         table.increments("id").primary();
         table.string("email").unique().notNullable();
         table.string("passwordhash").notNullable();
-        table.boolean("isAdmin").defaultTo(false);
+        table.boolean("isadmin").defaultTo(false);
     });
 };
 
 exports.down = function(knex) {
-    return knex.schema.table("users", function(table) {
-        table.dropColumn("isAdmin");
-    });
+    return knex.schema.dropTableIfExists("users");
 };

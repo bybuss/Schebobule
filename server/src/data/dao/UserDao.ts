@@ -11,7 +11,7 @@ export class UserDao {
     }
 
     async findByEmail(email: string): Promise<User | null> {
-        const result = await this.pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        const result = await this.pool.query("SELECT * FROM users WHERE email = $1", [email]);
         if (result.rows.length === 0) {
             console.log(`User not found for email: ${email}`);
             return null;
@@ -22,7 +22,7 @@ export class UserDao {
 
     async create(email: string, passwordHash: string, isAdmin: boolean = false): Promise<User> {
         const result = await this.pool.query(
-            'INSERT INTO users (email, passwordhash, isAdmin) VALUES ($1, $2, $3) RETURNING *',
+            "INSERT INTO users (email, passwordhash, isadmin) VALUES ($1, $2, $3) RETURNING *",
             [email, passwordHash, isAdmin]
         );
         return result.rows[0];
