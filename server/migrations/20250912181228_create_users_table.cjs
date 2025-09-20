@@ -3,8 +3,8 @@ exports.up = function(knex) {
     return knex.schema.createTable("users", function(table) {
         table.increments("id").primary();
         table.string("email").unique().notNullable();
-        table.string("passwordhash").notNullable();
-        table.boolean("isadmin").defaultTo(false);
+        table.string("password_hash").notNullable();
+        table.boolean("is_admin").defaultTo(false);
     });
 };
 

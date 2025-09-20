@@ -16,9 +16,9 @@ export class AuthRepositoryImpl implements AuthRepository {
         if (!user) return null;
 
         console.log(`Authenticating user with email: ${email}`);
-        console.log(`Stored password hash: ${user.passwordhash}`);
+        console.log(`Stored password hash: ${user.passwordHash}`);
 
-        const isValid = await bcrypt.compare(password, user.passwordhash);
+        const isValid = await bcrypt.compare(password, user.passwordHash);
         if (!isValid) return null;
 
         const token = jwt.sign(

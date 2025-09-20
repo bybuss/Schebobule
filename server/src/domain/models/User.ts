@@ -1,6 +1,6 @@
 export interface User {
     id: number;
     email: string;
-    passwordhash: string;
+    passwordHash: string;
     isAdmin: boolean;
 }
