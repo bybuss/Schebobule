@@ -10,6 +10,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
 
   try {
     const decoded = jwt.verify(token, "secretKey");
+    console.log('Decoded token:', decoded);
     req.user = decoded; 
     next();
   } catch (err) {

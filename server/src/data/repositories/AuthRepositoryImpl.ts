@@ -16,28 +16,28 @@ export class AuthRepositoryImpl implements AuthRepository {
         if (!user) return null;
 
         console.log(`Authenticating user with email: ${email}`);
-        console.log(`Stored password hash: ${user.passwordHash}`);
+        console.log(`Stored password hash: ${user.password_hash}`);
 
-        const isValid = await bcrypt.compare(password, user.passwordHash);
+        const isValid = await bcrypt.compare(password, user.password_hash);
         if (!isValid) return null;
 
         const token = jwt.sign(
-            { userId: user.id, email: user.email, isAdmin: user.isAdmin },
+            { userId: user.id, email: user.email, isAdmin: user.is_admin },
             "secretKey",
             { expiresIn: "1h" },
         );
         return token;
     }
 
-    async register(email: string, password: string): Promise<string | null> {
+    async register(email: string, password: string, isAdmin: boolean = false): Promise<string | null> {
         const existingUser = await this.userDao.findByEmail(email);
         if (existingUser) return null;
 
-        const passwordhash = await bcrypt.hash(password, 10);
-        const newUser = await this.userDao.create(email, passwordhash);
+        const passwordHash = await bcrypt.hash(password, 10);
+        const newUser = await this.userDao.create(email, passwordHash, isAdmin);
 
         const token = jwt.sign(
-            { userId: newUser.id, email: newUser.email, isAdmin: newUser.isAdmin },
+            { userId: newUser.id, email: newUser.email, isAdmin: newUser.is_admin },
             "secretKey",
             { expiresIn: "1h" },
         );

@@ -26,7 +26,9 @@ class AuthController {
     }
 
     async register(req: Request, res: Response): Promise<void> {
-        const { email, password } = req.body;
+        const { email, password, is_admin } = req.body;
+
+        console.log(`Register attempt with email: ${email}, password: ${password}, is_admin: ${is_admin}`);
 
         const token = await this.registerUserUseCase.execute(email, password);
         
