@@ -1,5 +1,5 @@
 import { injectable, inject } from "tsyringe";
-import type { AuthRepository } from "../../domain/repositories/AuthRepository.ts";
+import type { AuthRepository } from "../../repositories/AuthRepository.ts";
 
 @injectable()
 export class LoginUserUseCase {

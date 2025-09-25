@@ -36,6 +36,8 @@ export class AuthRepositoryImpl implements AuthRepository {
         const passwordHash = await bcrypt.hash(password, 10);
         const newUser = await this.userDao.create(email, passwordHash, isAdmin);
 
+        console.log(`Registered new user with email: ${email}, is_admin: ${isAdmin}`);
+
         const token = jwt.sign(
             { userId: newUser.id, email: newUser.email, isAdmin: newUser.is_admin },
             "secretKey",

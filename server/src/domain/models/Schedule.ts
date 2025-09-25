@@ -5,4 +5,5 @@ export interface Schedule {
     startTime: Date;
     endTime: Date;
     subject: string;
+    room: string;
 }

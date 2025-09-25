@@ -2,17 +2,28 @@ import "reflect-metadata";
 import express from "express";
 import { container } from "tsyringe";
 import type { Request, Response } from "express";
-import ScheduleController from "./presentation/controllers/ScheduleController.ts";
-import { GetScheduleUseCase } from "./domain/usecases/GetScheduleUseCase.ts";
-import { ScheduleRepositoryImpl } from "./data/repositories/ScheduleRepository.ts";
-import { pool } from "./common/connection.ts";
+import { ScheduleController } from "./presentation/controllers/ScheduleController.ts";
+import AuthController from "./presentation/controllers/AuthController.ts";
 import knex from 'knex';
 import dotenv from 'dotenv';
+import { pool } from "./common/connection.ts";
+import { ScheduleRepositoryImpl } from "./data/repositories/ScheduleRepositoryImpl.ts";
+import { ScheduleDao } from "./data/dao/ScheduleDao.ts";
 import { UserDao } from "./data/dao/UserDao.ts";
-import AuthController from "./presentation/controllers/AuthController.ts";
 import { AuthRepositoryImpl } from "./data/repositories/AuthRepositoryImpl.ts";
 import { authenticateToken } from "./middleware/authenticateToken";
 import { isAdmin } from "./middleware/isAdmin";
+
+import { CreateScheduleUseCase } from "./domain/usecases/schedule/CreateScheduleUseCase.ts";
+import { UpdateScheduleUseCase } from "./domain/usecases/schedule/UpdateScheduleUseCase.ts";
+import { DeleteScheduleUseCase } from "./domain/usecases/schedule/DeleteScheduleUseCase.ts";
+import { GetScheduleByIdUseCase } from "./domain/usecases/schedule/GetScheduleByIdUseCase.ts";
+import { GetScheduleByGroupUseCase } from "./domain/usecases/schedule/GetScheduleByGroupUseCase.ts";
+import { GetScheduleByTeacherUseCase } from "./domain/usecases/schedule/GetScheduleByTeacherUseCase.ts";
+import { GetScheduleByDateRangeUseCase } from "./domain/usecases/schedule/GetScheduleByDateRangeUseCase.ts";
+import { GetScheduleByGroupAndDateUseCase } from "./domain/usecases/schedule/GetScheduleByGroupAndDateUseCase.ts";
+import { GetSchedulesGroupedByTimeSlotUseCase } from "./domain/usecases/schedule/GetSchedulesGroupedByTimeSlotUseCase.ts";
+import { GetAllSchedulesUseCase } from "./domain/usecases/schedule/GetAllSchedulesUseCase.ts";
 
 dotenv.config();
 
@@ -34,16 +45,25 @@ container.registerInstance(UserDao, new UserDao(pool));
 container.registerSingleton("AuthRepository", AuthRepositoryImpl)
 container.registerSingleton(AuthController)
 
-container.registerSingleton("ScheduleRepository", ScheduleRepositoryImpl); 
-container.registerSingleton(GetScheduleUseCase);
+container.registerInstance(ScheduleDao, new ScheduleDao(pool));
+container.registerSingleton("ScheduleRepository", ScheduleRepositoryImpl);
 container.registerSingleton(ScheduleController);
+
+container.registerSingleton(CreateScheduleUseCase);
+container.registerSingleton(UpdateScheduleUseCase);
+container.registerSingleton(DeleteScheduleUseCase);
+container.registerSingleton(GetScheduleByIdUseCase);
+container.registerSingleton(GetScheduleByGroupUseCase);
+container.registerSingleton(GetScheduleByTeacherUseCase);
+container.registerSingleton(GetScheduleByDateRangeUseCase);
+container.registerSingleton(GetScheduleByGroupAndDateUseCase);
+container.registerSingleton(GetSchedulesGroupedByTimeSlotUseCase);
+container.registerSingleton(GetAllSchedulesUseCase);
 
 const router = express.Router();
 
 const scheduleController = container.resolve(ScheduleController);
 const authController = container.resolve(AuthController);
-
-router.get("/schedule/:groupName", scheduleController.getSchedue.bind(scheduleController));
 
 
 app.get("/", (req: Request, res, Response) => {
@@ -52,12 +72,22 @@ app.get("/", (req: Request, res, Response) => {
 
 app.use(express.json());
 
-app.use("/api", router);
 app.post("/login", authController.login.bind(authController));
 app.post("/register", authController.register.bind(authController));
-app.post('/schedule', authenticateToken, isAdmin, (req: Request, res: Response) => {
-  res.send("YOU ARE ADMIN!!");
-});
+
+router.get("/schedules", authenticateToken, scheduleController.getAllSchedules.bind(scheduleController));
+router.get("/schedules/grouped", authenticateToken, scheduleController.getSchedulesGroupedByTimeSlot.bind(scheduleController));
+router.get("/schedules/group/:groupName", authenticateToken, scheduleController.getScheduleByGroup.bind(scheduleController));
+router.get("/schedules/teacher/:teacherName", authenticateToken, scheduleController.getScheduleByTeacher.bind(scheduleController));
+router.get("/schedules/date-range", authenticateToken, scheduleController.getScheduleByDateRange.bind(scheduleController));
+router.get("/schedules/group/:groupName/date/:date", authenticateToken, scheduleController.getScheduleByGroupAndDate.bind(scheduleController));
+router.get("/schedules/:id", authenticateToken, scheduleController.getScheduleById.bind(scheduleController));
+
+router.post("/schedules", authenticateToken, isAdmin, scheduleController.createSchedule.bind(scheduleController));
+router.put("/schedules/:id", authenticateToken, isAdmin, scheduleController.updateSchedule.bind(scheduleController));
+router.delete("/schedules/:id", authenticateToken, isAdmin, scheduleController.deleteSchedule.bind(scheduleController));
+
+app.use("/api", router);
 
 db.migrate.latest()
   .then(() => {

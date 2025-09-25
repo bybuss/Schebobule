@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
-import { LoginUserUseCase } from "src/domain/usecases/LoginUserUseCase";
-import { RegisterUserUseCase } from "src/domain/usecases/RegisterUserUseCase";
+import { LoginUserUseCase } from "src/domain/usecases/auth/LoginUserUseCase";
+import { RegisterUserUseCase } from "src/domain/usecases/auth/RegisterUserUseCase";
 
 @injectable()
 class AuthController {
@@ -30,7 +30,7 @@ class AuthController {
 
         console.log(`Register attempt with email: ${email}, password: ${password}, is_admin: ${is_admin}`);
 
-        const token = await this.registerUserUseCase.execute(email, password);
+        const token = await this.registerUserUseCase.execute(email, password, is_admin);
         
         if (!token) {
             res.status(400).json({ message: "User already exists" });
