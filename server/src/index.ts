@@ -10,6 +10,7 @@ import { pool } from "./common/connection.ts";
 import { ScheduleRepositoryImpl } from "./data/repositories/ScheduleRepositoryImpl.ts";
 import { ScheduleDao } from "./data/dao/ScheduleDao.ts";
 import { UserDao } from "./data/dao/UserDao.ts";
+import { RefreshTokenDao } from "./data/dao/RefreshTokenDao.ts";
 import { AuthRepositoryImpl } from "./data/repositories/AuthRepositoryImpl.ts";
 import { authenticateToken } from "./middleware/authenticateToken";
 import { isAdmin } from "./middleware/isAdmin";
@@ -42,6 +43,7 @@ const db = knex({
 });
 
 container.registerInstance(UserDao, new UserDao(pool));
+container.registerInstance(RefreshTokenDao, new RefreshTokenDao(pool));
 container.registerSingleton("AuthRepository", AuthRepositoryImpl)
 container.registerSingleton(AuthController)
 
@@ -74,6 +76,8 @@ app.use(express.json());
 
 app.post("/login", authController.login.bind(authController));
 app.post("/register", authController.register.bind(authController));
+app.post("/refresh-token", authController.refreshToken.bind(authController));
+app.post("/logout", authController.logout.bind(authController));
 
 router.get("/schedules", authenticateToken, scheduleController.getAllSchedules.bind(scheduleController));
 router.get("/schedules/grouped", authenticateToken, scheduleController.getSchedulesGroupedByTimeSlot.bind(scheduleController));

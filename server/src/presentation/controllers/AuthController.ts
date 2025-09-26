@@ -2,42 +2,89 @@ import type { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 import { LoginUserUseCase } from "src/domain/usecases/auth/LoginUserUseCase";
 import { RegisterUserUseCase } from "src/domain/usecases/auth/RegisterUserUseCase";
+import { RefreshTokenUseCase } from "../../domain/usecases/auth/RefreshTokenUseCase.ts";
+import { LogoutUseCase } from "../../domain/usecases/auth/LogoutUseCase.ts";
 
 @injectable()
-class AuthController {
+export class AuthController {
     constructor(
         @inject(LoginUserUseCase) private loginUseCase: LoginUserUseCase,
-        @inject(RegisterUserUseCase) private registerUserUseCase: RegisterUserUseCase
+        @inject(RegisterUserUseCase) private registerUserUseCase: RegisterUserUseCase,
+        @inject(RefreshTokenUseCase) private refreshTokenUseCase: RefreshTokenUseCase,
+        @inject(LogoutUseCase) private logoutUseCase: LogoutUseCase
     ) {}
 
     async login(req: Request, res: Response): Promise<void> {
         const { email, password } = req.body;
 
-        console.log(`Login attempt with email: ${email}, password: ${password}`);
+        console.log(`Login attempt with email: ${email}`);
 
-        const token = await this.loginUseCase.execute(email, password);
+        const tokens = await this.loginUseCase.execute(email, password);
 
-        if (!token) {
+        if (!tokens) {
             res.status(401).json({ message: "Invalid credentials" });
             return;
         }
 
-        res.json({ token });
+        res.json({
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken
+        });
     }
 
     async register(req: Request, res: Response): Promise<void> {
         const { email, password, is_admin } = req.body;
 
-        console.log(`Register attempt with email: ${email}, password: ${password}, is_admin: ${is_admin}`);
-
-        const token = await this.registerUserUseCase.execute(email, password, is_admin);
+        const tokens = await this.registerUserUseCase.execute(email, password, is_admin);
         
-        if (!token) {
+        if (!tokens) {
             res.status(400).json({ message: "User already exists" });
             return;
         }
 
-        res.json({ token });
+        res.json({
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken
+        });
+    }
+
+    async refreshToken(req: Request, res: Response): Promise<void> {
+        const { refreshToken } = req.body;
+
+        if (!refreshToken) {
+            res.status(400).json({ message: "Refresh token is required" });
+            return;
+        }
+
+        const tokens = await this.refreshTokenUseCase.execute(refreshToken);
+
+        if (!tokens) {
+            res.status(401).json({ message: "Invalid or expired refresh token" });
+            return;
+        }
+
+        res.json({
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken
+        });
+    }
+
+    async logout(req: Request, res: Response): Promise<void> {
+        const { refreshToken } = req.body;
+
+        if (!refreshToken) {
+            res.status(400).json({ message: "Refresh token is required" });
+            return;
+        }
+
+        const success = await this.logoutUseCase.execute(refreshToken);
+
+        if (!success) {
+            res.status(400).json({ message: "Failed to logout" });
+            return;
+        }
+
+        res.json({ message: "Logged out successfully" });
     }
 }
 

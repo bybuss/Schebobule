@@ -7,7 +7,7 @@ export class RegisterUserUseCase {
         @inject("AuthRepository") private authRepository: AuthRepository
     ) {}
 
-    async execute(email: string, password: string, isAdmin: boolean = false): Promise<string | null> {
+    async execute(email: string, password: string, isAdmin: boolean = false): Promise<{ accessToken: string; refreshToken: string } | null> {
         return await this.authRepository.register(email, password, isAdmin);
     }
 }

@@ -2,12 +2,12 @@ import { injectable, inject } from "tsyringe";
 import type { AuthRepository } from "../../repositories/AuthRepository.ts";
 
 @injectable()
-export class LoginUserUseCase {
+export class RefreshTokenUseCase {
     constructor(
         @inject("AuthRepository") private authRepository: AuthRepository
     ) {}
 
-    async execute(email: string, password: string): Promise<{ accessToken: string; refreshToken: string } | null> {
-        return await this.authRepository.authenticate(email, password);
+    async execute(refreshToken: string): Promise<{ accessToken: string; refreshToken: string } | null> {
+        return await this.authRepository.refreshToken(refreshToken);
     }
 }
