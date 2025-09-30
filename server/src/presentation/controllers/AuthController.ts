@@ -70,21 +70,28 @@ export class AuthController {
     }
 
     async logout(req: Request, res: Response): Promise<void> {
-        const { refreshToken } = req.body;
+        try {
+            const authHeader = req.header("Authorization");
+            const accessToken = authHeader?.startsWith("Bearer ") ? authHeader.substring(7) : authHeader;
+            const { refreshToken } = req.body;
 
-        if (!refreshToken) {
-            res.status(400).json({ message: "Refresh token is required" });
-            return;
+            if (!accessToken || !refreshToken) {
+                res.status(400).json({ message: "Access token and refresh token are required" });
+                return;
+            }
+
+            const success = await this.logoutUseCase.execute(accessToken, refreshToken);
+
+            if (!success) {
+                res.status(400).json({ message: "Failed to logout" });
+                return;
+            }
+
+            res.json({ message: "Logged out successfully" });
+        } catch (error) {
+            console.error("Logout error:", error);
+            res.status(500).json({ message: "Internal server error" });
         }
-
-        const success = await this.logoutUseCase.execute(refreshToken);
-
-        if (!success) {
-            res.status(400).json({ message: "Failed to logout" });
-            return;
-        }
-
-        res.json({ message: "Logged out successfully" });
     }
 }
 

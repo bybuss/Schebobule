@@ -7,7 +7,7 @@ export class LogoutUseCase {
         @inject("AuthRepository") private authRepository: AuthRepository
     ) {}
 
-    async execute(refreshToken: string): Promise<boolean> {
-        return await this.authRepository.logout(refreshToken);
+    async execute(accessToken: string, refreshToken: string): Promise<boolean> {
+        return await this.authRepository.logout(accessToken, refreshToken);
     }
 }

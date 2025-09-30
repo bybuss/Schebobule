@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import type { AuthRepository } from "../../domain/repositories/AuthRepository.ts";
 import { UserDao } from "../../data/dao/UserDao.ts";
 import { RefreshTokenDao } from "../../data/dao/RefreshTokenDao.ts";
+import { AccessTokenBlacklistDao } from "../../data/dao/AccessTokenBlacklistDao.ts";
 import type { JwtPayload } from "../../domain/models/JwtPayload.ts";
 
 @singleton()
@@ -16,7 +17,8 @@ export class AuthRepositoryImpl implements AuthRepository {
 
     constructor(
         @inject(UserDao) private userDao: UserDao,
-        @inject(RefreshTokenDao) private refreshTokenDao: RefreshTokenDao
+        @inject(RefreshTokenDao) private refreshTokenDao: RefreshTokenDao,
+        @inject(AccessTokenBlacklistDao) private blacklistDao: AccessTokenBlacklistDao
     ) {}
 
     async authenticate(email: string, password: string): Promise<{ accessToken: string; refreshToken: string } | null> {
@@ -71,8 +73,27 @@ export class AuthRepositoryImpl implements AuthRepository {
         }
     }
 
-    async logout(refreshToken: string): Promise<boolean> {
-        return await this.refreshTokenDao.revokeToken(refreshToken);
+    async logout(accessToken: string, refreshToken: string): Promise<boolean> {
+        try {
+            const refreshRevoked = await this.refreshTokenDao.revokeToken(refreshToken);
+            
+            if (accessToken) {
+                const decoded = jwt.decode(accessToken) as JwtPayload;
+                if (decoded && decoded.exp) {
+                    const expiresAt = new Date(decoded.exp * 1000);
+                    await this.blacklistDao.addToBlacklist(accessToken, expiresAt);
+                }
+            }
+
+            return refreshRevoked;
+        } catch (error) {
+            console.error("Logout error:", error);
+            return false;
+        }
+    }
+
+    async isAccessTokenBlacklisted(token: string): Promise<boolean> {
+        return await this.blacklistDao.isTokenBlacklisted(token);
     }
 
     private async generateTokens(user: any): Promise<{ accessToken: string; refreshToken: string }> {

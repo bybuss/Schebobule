@@ -11,6 +11,7 @@ import { ScheduleRepositoryImpl } from "./data/repositories/ScheduleRepositoryIm
 import { ScheduleDao } from "./data/dao/ScheduleDao.ts";
 import { UserDao } from "./data/dao/UserDao.ts";
 import { RefreshTokenDao } from "./data/dao/RefreshTokenDao.ts";
+import { AccessTokenBlacklistDao } from "./data/dao/AccessTokenBlacklistDao.ts";
 import { AuthRepositoryImpl } from "./data/repositories/AuthRepositoryImpl.ts";
 import { authenticateToken } from "./middleware/authenticateToken";
 import { isAdmin } from "./middleware/isAdmin";
@@ -43,6 +44,7 @@ const db = knex({
 });
 
 container.registerInstance(UserDao, new UserDao(pool));
+container.registerInstance(AccessTokenBlacklistDao, new AccessTokenBlacklistDao(pool));
 container.registerInstance(RefreshTokenDao, new RefreshTokenDao(pool));
 container.registerSingleton("AuthRepository", AuthRepositoryImpl)
 container.registerSingleton(AuthController)
