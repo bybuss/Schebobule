@@ -19,7 +19,6 @@ export class UserDao {
         console.log(`Found user: ${JSON.stringify(result.rows[0])}`);
         console.log('User from DB:', JSON.stringify(result.rows[0]));
         console.log('Password hash field:', result.rows[0].password_hash);
-        console.log('PasswordHash field:', result.rows[0].passwordHash);
         return result.rows.length > 0 ? result.rows[0] as User : null;
     }
 
