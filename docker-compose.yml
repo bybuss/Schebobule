@@ -10,7 +10,7 @@ services:
             POSTGRES_PASSWORD: admin
             POSTGRES_DB: schebobule
         volumes:
-            - postgres_data:/var/lib/postgresql/data
+            - postgres_data:/var/lib/postgresql/18/docker
         ports:
             - "5432:5432"
         env_file:
