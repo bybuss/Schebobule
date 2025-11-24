@@ -16,7 +16,7 @@ export class RefreshTokenDao {
              VALUES ($1, $2, $3, $4) RETURNING *`,
             [token.userId, token.token, token.expiresAt, token.isRevoked]
         );
-        return this.mapToRefreshToken(result.rows[0]);
+        return this.mapToRefreshToken(result.rows[0]);  
     }
 
     async findByToken(token: string): Promise<RefreshToken | null> {

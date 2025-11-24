@@ -72,8 +72,13 @@ export class AuthController {
     async logout(req: Request, res: Response): Promise<void> {
         try {
             const authHeader = req.header("Authorization");
-            const accessToken = authHeader?.startsWith("Bearer ") ? authHeader.substring(7) : authHeader;
-            const { refreshToken } = req.body;
+            const accessTokenFromHeader = authHeader?.startsWith("Bearer ") ? authHeader.substring(7) : null;
+            const { accessToken: accessTokenFromBody, refreshToken } = req.body;
+
+            const accessToken = accessTokenFromHeader || accessTokenFromBody;
+
+            console.log("[AuthController] Logout - Access token present:", !!accessToken);
+            console.log("[AuthController] Logout - Refresh token present:", !!refreshToken);
 
             if (!accessToken || !refreshToken) {
                 res.status(400).json({ message: "Access token and refresh token are required" });

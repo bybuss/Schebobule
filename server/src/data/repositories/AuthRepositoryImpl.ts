@@ -76,26 +76,23 @@ export class AuthRepositoryImpl implements AuthRepository {
     async logout(accessToken: string, refreshToken: string): Promise<boolean> {
         try {
             console.log("[AuthRepositoryImpl] Starting logout process");
-            console.log("[AuthRepositoryImpl] Revoking refresh token:", refreshToken?.substring(0, 20) + "...");
             
-            const refreshRevoked = await this.refreshTokenDao.revokeToken(refreshToken);
-            console.log("[AuthRepositoryImpl] Refresh token revoked:", refreshRevoked);
+            let refreshRevoked = true;
+            if (refreshToken) {
+                refreshRevoked = await this.refreshTokenDao.revokeToken(refreshToken);
+                console.log("[AuthRepositoryImpl] Refresh token revoked:", refreshRevoked);
+            }
             
             if (accessToken) {
-                console.log("[AuthRepositoryImpl] Processing access token for blacklist:", accessToken?.substring(0, 20) + "...");
                 const decoded = jwt.decode(accessToken) as JwtPayload;
-                console.log("[AuthRepositoryImpl] Decoded access token:", decoded);
                 
                 if (decoded && decoded.exp) {
                     const expiresAt = new Date(decoded.exp * 1000);
-                    console.log("[AuthRepositoryImpl] Adding to blacklist, expires at:", expiresAt);
                     const blacklistResult = await this.blacklistDao.addToBlacklist(accessToken, expiresAt);
-                    console.log("[AuthRepositoryImpl] Access token blacklisted:", blacklistResult);
+                    console.log("[AuthRepositoryImpl] Access token added in blacklist:", blacklistResult);
                 } else {
-                    console.log("[AuthRepositoryImpl] Could not decode access token or no exp field");
+                    console.log("[AuthRepositoryImpl] Could not decode access token or no expiration");
                 }
-            } else {
-                console.log("[AuthRepositoryImpl] No access token provided for blacklisting");
             }
 
             return refreshRevoked;
@@ -106,7 +103,6 @@ export class AuthRepositoryImpl implements AuthRepository {
     }
 
     async isAccessTokenBlacklisted(token: string): Promise<boolean> {
-        console.log("[AuthRepositoryImpl] Checking if token is blacklisted:", token?.substring(0, 20) + "...");
         const result = await this.blacklistDao.isTokenBlacklisted(token);
         console.log("[AuthRepositoryImpl] Token blacklisted result:", result);
         return result;
