@@ -3,13 +3,13 @@ import type { ScheduleRepository } from "../repositories/ScheduleRepository";
 import { Schedule } from "../models/Schedule";
 
 @injectable()
-export class GetSchedulesUseCase {
+export class CreateScheduleUseCase {
     constructor(
         @inject("ScheduleRepository") private scheduleRepository: ScheduleRepository
     ) {}
 
-    async execute(): Promise<Schedule[]> {
-        console.log("[GetSchedulesUseCase] Executing get all schedules");
-        return this.scheduleRepository.getAllSchedules();
+    async execute(schedule: Omit<Schedule, "id">): Promise<Schedule> {
+        console.log("[CreateScheduleUseCase] Executing create schedule:", schedule);
+        return this.scheduleRepository.createSchedule(schedule);
     }
 }

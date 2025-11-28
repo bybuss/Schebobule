@@ -2,13 +2,15 @@ import { injectable, inject } from "tsyringe";
 import type { AuthRepository } from "../repositories/AuthRepository";
 
 @injectable()
-export class RegisterUseCase {
-    constructor(@inject("AuthRepository") private authRepository: AuthRepository) {}
+export class LoginUseCase {
+    constructor(
+        @inject("AuthRepository") private authRepository: AuthRepository
+    ) {}
 
-    async execute(email: string, password: string, isAdmin: boolean) {
+    async execute(email: string, password: string) {
         if (!email || !password) {
             throw new Error("Email и пароль обязательны");
         }
-        return this.authRepository.register(email, password, isAdmin);
+        return this.authRepository.authenticate(email, password);
     }
 }

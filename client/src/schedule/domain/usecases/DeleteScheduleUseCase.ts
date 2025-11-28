@@ -1,15 +1,14 @@
 import { injectable, inject } from "tsyringe";
 import type { ScheduleRepository } from "../repositories/ScheduleRepository";
-import { Schedule } from "../models/Schedule";
 
 @injectable()
-export class GetSchedulesUseCase {
+export class DeleteScheduleUseCase {
     constructor(
         @inject("ScheduleRepository") private scheduleRepository: ScheduleRepository
     ) {}
 
-    async execute(): Promise<Schedule[]> {
-        console.log("[GetSchedulesUseCase] Executing get all schedules");
-        return this.scheduleRepository.getAllSchedules();
+    async execute(id: number): Promise<void> {
+        console.log("[DeleteScheduleUseCase] Executing delete schedule ID:", id);
+        return this.scheduleRepository.deleteSchedule(id);
     }
 }

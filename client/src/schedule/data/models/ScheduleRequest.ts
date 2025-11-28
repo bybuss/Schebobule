@@ -1,9 +1,6 @@
-export interface Schedule {
-    id: number;
+export interface ScheduleRequest {
     groupName: string;
     teacherName: string;
-    startTime: Date;
-    endTime: Date;
     subject: string;
     room: string;
     pairNumber: number;
