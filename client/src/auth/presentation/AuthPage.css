@@ -1,0 +1,295 @@
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #fefae0;
+    padding: 20px;
+}
+
+.auth-card {
+    background-color: #e9edc9;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 450px;
+    border: 2px solid #ccd5ae;
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #ccd5ae;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: #d4a373;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.tab-button.active {
+    color: #000;
+    border-bottom-color: #d4a373;
+}
+
+.tab-button:hover {
+    background-color: #ccd5ae;
+    color: #000;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #000;
+}
+
+.input-group input {
+    padding: 12px 15px;
+    border: 2px solid #ccd5ae;
+    border-radius: 8px;
+    background-color: #fefae0;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #d4a373;
+}
+
+.checkbox-group {
+    margin: 10px 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    color: #000;
+    position: relative;
+    padding-left: 35px;
+}
+
+.checkbox-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkmark {
+    position: absolute;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #fefae0;
+    border: 2px solid #ccd5ae;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.checkbox-label input:checked ~ .checkmark {
+    background-color: #d4a373;
+    border-color: #d4a373;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-label input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.policy-link {
+    background: none;
+    border: none;
+    color: #d4a373;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 4px;
+}
+
+.policy-link:hover {
+    color: #000;
+}
+
+.submit-button {
+    padding: 14px;
+    background-color: #d4a373;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.submit-button:hover:not(:disabled) {
+    background-color: #ccd5ae;
+}
+
+.submit-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.error-message {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid #c62828;
+}
+
+.error-close {
+    background: none;
+    border: none;
+    color: #c62828;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-content {
+    background-color: #fefae0;
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 2px solid #ccd5ae;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: #d4a373;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.policy-text {
+    margin-bottom: 25px;
+    line-height: 1.6;
+    color: #000;
+}
+
+.close-button {
+    background-color: #d4a373;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    display: block;
+    margin: 0 auto;
+    transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+    background-color: #ccd5ae;
+}
+
+@media (max-width: 768px) {
+    .auth-container {
+        padding: 15px;
+    }
+    
+    .auth-card {
+        padding: 25px 20px;
+    }
+    
+    .modal-content {
+        padding: 25px 20px;
+        margin: 10px;
+    }
+    
+    .tab-button {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .input-group input {
+        padding: 10px 12px;
+    }
+    
+    .submit-button {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 20px 15px;
+    }
+    
+    .auth-tabs {
+        margin-bottom: 20px;
+    }
+    
+    .tab-button {
+        font-size: 13px;
+        padding: 8px;
+    }
+    
+    .modal-content {
+        padding: 20px 15px;
+    }
+}

@@ -15,19 +15,33 @@ import { CreateScheduleUseCase } from "../schedule/domain/usecases/CreateSchedul
 import { UpdateScheduleUseCase } from "../schedule/domain/usecases/UpdateScheduleUseCase";
 import { DeleteScheduleUseCase } from "../schedule/domain/usecases/DeleteScheduleUseCase";
 
-container.registerSingleton(TokenService);
-container.registerSingleton(NetworkService);
+const tokenService = new TokenService();
+const networkService = new NetworkService(tokenService);
 
-container.register<AuthRepository>("AuthRepository", AuthRepositoryImpl);
-container.register<ScheduleRepository>("ScheduleRepository", ScheduleRepositoryImpl);
+const authRepository = new AuthRepositoryImpl(networkService);
+const scheduleRepository = new ScheduleRepositoryImpl(networkService);
 
-container.registerSingleton(LoginUseCase);
-container.registerSingleton(RegisterUseCase);
-container.registerSingleton(RefreshTokenUseCase);
-container.registerSingleton(LogoutUseCase);
-container.registerSingleton(GetSchedulesUseCase);
-container.registerSingleton(CreateScheduleUseCase);
-container.registerSingleton(UpdateScheduleUseCase);
-container.registerSingleton(DeleteScheduleUseCase);
+const loginUseCase = new LoginUseCase(authRepository);
+const registerUseCase = new RegisterUseCase(authRepository);
+const refreshTokenUseCase = new RefreshTokenUseCase(authRepository);
+const logoutUseCase = new LogoutUseCase(authRepository);
+
+const getSchedulesUseCase = new GetSchedulesUseCase(scheduleRepository);
+const createScheduleUseCase = new CreateScheduleUseCase(scheduleRepository);
+const updateScheduleUseCase = new UpdateScheduleUseCase(scheduleRepository);
+const deleteScheduleUseCase = new DeleteScheduleUseCase(scheduleRepository);
+
+container.registerInstance(TokenService, tokenService);
+container.registerInstance(NetworkService, networkService);
+container.registerInstance("AuthRepository", authRepository);
+container.registerInstance("ScheduleRepository", scheduleRepository);
+container.registerInstance(LoginUseCase, loginUseCase);
+container.registerInstance(RegisterUseCase, registerUseCase);
+container.registerInstance(RefreshTokenUseCase, refreshTokenUseCase);
+container.registerInstance(LogoutUseCase, logoutUseCase);
+container.registerInstance(GetSchedulesUseCase, getSchedulesUseCase);
+container.registerInstance(CreateScheduleUseCase, createScheduleUseCase);
+container.registerInstance(UpdateScheduleUseCase, updateScheduleUseCase);
+container.registerInstance(DeleteScheduleUseCase, deleteScheduleUseCase);
 
 export { container };

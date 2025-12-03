@@ -26,13 +26,17 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
-    const tokenService = container.resolve(TokenService);
+    const [tokenService] = useState<TokenService>(() => container.resolve(TokenService));
 
     useEffect(() => {
         console.log("[AuthProvider] Initializing auth context");
         const token = tokenService.getAccessToken();
-        if (token !== null) { console.log("[AuthProvider] No access token found"); }
-    }, []);
+        if (token) {
+            console.log("[AuthProvider] Found access token, user is considered authenticated");
+        } else {
+            console.log("[AuthProvider] No access token found");
+        }
+    }, [tokenService]);
 
     const login = (user: User, accessToken: string, refreshToken: string) => {
         console.log("[AuthProvider] User logged in:", user.email);
