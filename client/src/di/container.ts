@@ -14,11 +14,13 @@ import { GetSchedulesUseCase } from "../schedule/domain/usecases/GetSchedulesUse
 import { CreateScheduleUseCase } from "../schedule/domain/usecases/CreateScheduleUseCase";
 import { UpdateScheduleUseCase } from "../schedule/domain/usecases/UpdateScheduleUseCase";
 import { DeleteScheduleUseCase } from "../schedule/domain/usecases/DeleteScheduleUseCase";
+import { JwtService } from "../common/data/JwtService";
 
 const tokenService = new TokenService();
 const networkService = new NetworkService(tokenService);
+const jwtService = new JwtService();
 
-const authRepository = new AuthRepositoryImpl(networkService);
+const authRepository = new AuthRepositoryImpl(networkService, jwtService);
 const scheduleRepository = new ScheduleRepositoryImpl(networkService);
 
 const loginUseCase = new LoginUseCase(authRepository);
@@ -32,6 +34,7 @@ const updateScheduleUseCase = new UpdateScheduleUseCase(scheduleRepository);
 const deleteScheduleUseCase = new DeleteScheduleUseCase(scheduleRepository);
 
 container.registerInstance(TokenService, tokenService);
+container.registerInstance(JwtService, jwtService);
 container.registerInstance(NetworkService, networkService);
 container.registerInstance("AuthRepository", authRepository);
 container.registerInstance("ScheduleRepository", scheduleRepository);

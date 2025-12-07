@@ -247,6 +247,32 @@
     background-color: #ccd5ae;
 }
 
+.policy-modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.full-policy-button {
+    background-color: #d4a373;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.full-policy-button:hover {
+    background-color: #ccd5ae;
+}
+
 @media (max-width: 768px) {
     .auth-container {
         padding: 15px;

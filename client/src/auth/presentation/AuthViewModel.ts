@@ -49,7 +49,14 @@ export const useAuthViewModel = () => {
         
         try {
             const result = await loginUseCase.execute(model.email, model.password);
-            console.log("[AuthViewModel] Login successful");
+            console.log("[AuthViewModel] Login successful, result:", result);
+            
+            console.log("[AuthViewModel] Result structure:", {
+                hasUser: !!result.user,
+                keys: Object.keys(result),
+                fullResult: JSON.stringify(result)
+            });
+            
             authLogin(result.user, result.accessToken, result.refreshToken);
         } catch (error: any) {
             console.error("[AuthViewModel] Login error:", error);

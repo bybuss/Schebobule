@@ -4,4 +4,6 @@ export interface ScheduleRequest {
     subject: string;
     room: string;
     pairNumber: number;
+    startTime: string; 
+    endTime: string;
 }

@@ -1,0 +1,137 @@
+.privacy-policy-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    background-color: #fefae0;
+    padding: 20px;
+}
+
+.privacy-policy-card {
+    background-color: #e9edc9;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 100%;
+    max-width: 800px;
+    border: 2px solid #ccd5ae;
+    margin: 20px 0;
+}
+
+.policy-title {
+    color: #d4a373;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 32px;
+    border-bottom: 2px solid #ccd5ae;
+    padding-bottom: 15px;
+}
+
+.policy-content {
+    line-height: 1.6;
+    color: #000;
+}
+
+.policy-section {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #ccd5ae;
+}
+
+.policy-section:last-child {
+    border-bottom: none;
+}
+
+.policy-section h2 {
+    color: #d4a373;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.policy-section p {
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+.policy-list {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+.policy-list li {
+    margin-bottom: 8px;
+    padding-left: 10px;
+}
+
+.policy-list strong {
+    color: #d4a373;
+}
+
+.contact-info {
+    background-color: #fefae0;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #d4a373;
+    margin: 15px 0;
+}
+
+.contact-info p {
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contact-info p::before {
+    font-size: 18px;
+}
+
+.policy-date {
+    font-style: italic;
+    color: #666;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #ccd5ae;
+}
+
+.policy-footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #ccd5ae;
+    color: #d4a373;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+@media (max-width: 768px) {
+    .privacy-policy-container {
+        padding: 15px;
+    }
+    
+    .privacy-policy-card {
+        padding: 25px 20px;
+    }
+    
+    .policy-title {
+        font-size: 26px;
+    }
+    
+    .policy-section h2 {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .privacy-policy-card {
+        padding: 20px 15px;
+    }
+    
+    .policy-title {
+        font-size: 22px;
+    }
+    
+    .policy-list {
+        margin-left: 15px;
+    }
+}

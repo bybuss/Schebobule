@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext, useEffect, ReactNode } from
 import { User } from "../auth/domain/models/User";
 import { TokenService } from "../common/data/TokenService";
 import { container } from "../di/container";
+import { JwtService } from "../common/data/JwtService";
 
 interface AuthContextType {
     user: User | null;
@@ -26,17 +27,26 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
-    const [tokenService] = useState<TokenService>(() => container.resolve(TokenService));
+    const tokenService = container.resolve(TokenService);
+    const jwtService = container.resolve(JwtService);
 
     useEffect(() => {
         console.log("[AuthProvider] Initializing auth context");
         const token = tokenService.getAccessToken();
         if (token) {
-            console.log("[AuthProvider] Found access token, user is considered authenticated");
+            console.log("[AuthProvider] Found access token, decoding user");
+            const decodedUser = jwtService.createUserFromToken(token);
+            if (decodedUser) {
+                console.log("[AuthProvider] User decoded from token:", decodedUser);
+                setUser(decodedUser);
+            } else {
+                console.log("[AuthProvider] Failed to decode user from token, clearing tokens");
+                tokenService.clearTokens();
+            }
         } else {
             console.log("[AuthProvider] No access token found");
         }
-    }, [tokenService]);
+    }, [tokenService, jwtService]);
 
     const login = (user: User, accessToken: string, refreshToken: string) => {
         console.log("[AuthProvider] User logged in:", user.email);

@@ -1,10 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuthViewModel } from "./AuthViewModel";
 import "./AuthPage.css";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../app/AuthContext";
 
 export const AuthPage: React.FC = () => {
     const { model, intent } = useAuthViewModel();
     const [isPolicyModalOpen, setPolicyModalOpen] = useState(false);
+    const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
+
+    useEffect(() => {
+        console.log("[AuthPage] Auth status changed:", isAuthenticated);
+        if (isAuthenticated) {
+            console.log("[AuthPage] User authenticated, redirecting to schedule");
+            navigate("/schedule");
+        }
+    }, [isAuthenticated, navigate]);
 
     const openPolicyModal = () => {
         console.log("[AuthPage] Opening policy modal");
@@ -24,6 +36,11 @@ export const AuthPage: React.FC = () => {
         } else {
             intent.handleRegister();
         }
+    };
+
+    const openFullPolicyPage = () => {
+        console.log("[AuthPage] Opening full policy page");
+        navigate("/privacy-policy");
     };
 
     return (
@@ -117,10 +134,17 @@ export const AuthPage: React.FC = () => {
                     <div className="modal-content">
                         <h2>Политика конфиденциальности</h2>
                         <div className="policy-text">
-                            <p>Здесь будет текст политики конфиденциальности...</p>
-                            <p>Мы обязуемся защищать ваши персональные данные и обеспечивать их конфиденциальность.</p>
+                            <p>Для регистрации в системе необходимо согласиться с политикой конфиденциальности.</p>
+                            <p>Нажимая на кнопку "Показать полную политику", вы можете ознакомиться с полным текстом.</p>
                         </div>
-                        <button className="close-button" onClick={closePolicyModal}>Закрыть</button>
+                        <div className="policy-modal-actions">
+                            <button className="full-policy-button" onClick={openFullPolicyPage}>
+                                📄 Показать полную политику
+                            </button>
+                            <button className="close-button" onClick={closePolicyModal}>
+                                Закрыть
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
