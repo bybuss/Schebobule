@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import express from "express";
+import cors from "cors";
 import dotenv from "dotenv";
 import knex from "knex";
 import "./di/container.ts";
@@ -10,6 +11,17 @@ dotenv.config();
 
 const app = express();
 const PORT = 5000;
+
+const corsOptions = {
+    origin: ['http://localhost:3000'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    exposedHeaders: ['Content-Length', 'X-Powered-By'],
+    maxAge: 86400
+};
+
+app.use(cors(corsOptions));
 
 const db = knex({
     client: "pg",
