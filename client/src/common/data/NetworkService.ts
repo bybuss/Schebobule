@@ -9,10 +9,9 @@ export class NetworkService {
     private refreshSubscribers: ((token: string) => void)[] = [];
 
     constructor(@inject(TokenService) private tokenService: TokenService) {
-        console.log("[NetworkService] Initializing with base URL:", process.env.REACT_APP_BASE_API_URL  || "http://localhost:5000");
-        
+        const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000"
         this.client = axios.create({
-            baseURL: process.env.REACT_APP_BASE_API_URL || "http://localhost:5000",
+            baseURL: apiUrl,
             timeout: 10000,
         });
 
