@@ -44,7 +44,7 @@ services:
         build:
             context: ./client
             dockerfile: Dockerfile
-        container_name: schebobule-client
+        container_name: client
         ports:
             - "3000:3000"
         depends_on:
