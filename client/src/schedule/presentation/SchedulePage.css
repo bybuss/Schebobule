@@ -75,12 +75,12 @@
     border-color: #d4a373;
 }
 
-.filter-buttons {
+/* .filter-buttons {
     display: flex;
     gap: 10px;
-}
+} */
 
-.apply-filter-button,
+/* .apply-filter-button,
 .clear-filter-button {
     padding: 10px 20px;
     border: none;
@@ -108,7 +108,7 @@
 
 .clear-filter-button:hover {
     background-color: #e9edc9;
-}
+} */
 
 .loading-container {
     display: flex;
@@ -199,12 +199,12 @@
         width: 100%;
     }
     
-    .filter-buttons {
+    /* .filter-buttons {
         width: 100%;
     }
     
     .apply-filter-button,
     .clear-filter-button {
         flex: 1;
-    }
+    } */
 }

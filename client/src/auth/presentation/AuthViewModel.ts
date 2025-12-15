@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { LoginUseCase } from "../domain/usecases/LoginUseCase";
 import { RegisterUseCase } from "../domain/usecases/RegisterUseCase";
-import { useAuth } from "../../app/AuthContext";
+import { useAuth } from "../../AuthContext";
 import { AuthAction } from "./AuthAction";
 import { AuthState } from "./AuthState";
 import { container } from "../../di/container";

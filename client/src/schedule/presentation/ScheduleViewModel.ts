@@ -4,7 +4,7 @@ import { GetSchedulesUseCase } from "../domain/usecases/GetSchedulesUseCase";
 import { CreateScheduleUseCase } from "../domain/usecases/CreateScheduleUseCase";
 import { UpdateScheduleUseCase } from "../domain/usecases/UpdateScheduleUseCase";
 import { DeleteScheduleUseCase } from "../domain/usecases/DeleteScheduleUseCase";
-import { useAuth } from "../../app/AuthContext";
+import { useAuth } from "../../AuthContext";
 import { Schedule } from "../domain/models/Schedule";
 import { ScheduleState } from "./ScheduleState";
 import { ScheduleAction } from "./ScheduleAction";

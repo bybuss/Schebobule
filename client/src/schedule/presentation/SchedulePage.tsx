@@ -58,18 +58,6 @@ export const SchedulePage: React.FC = () => {
                             placeholder="Введите ФИО преподавателя"
                         />
                     </div>
-                    <div className="filter-buttons">
-                        <button type="submit" className="apply-filter-button">
-                            Применить фильтры
-                        </button>
-                        <button 
-                            type="button" 
-                            className="clear-filter-button"
-                            onClick={action.clearFilters}
-                        >
-                            Очистить фильтры
-                        </button>
-                    </div>
                 </form>
             </div>
 

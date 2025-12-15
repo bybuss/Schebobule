@@ -1,8 +1,8 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from "react";
-import { User } from "../auth/domain/models/User";
-import { TokenService } from "../common/data/TokenService";
-import { container } from "../di/container";
-import { JwtService } from "../common/data/JwtService";
+import { User } from "./auth/domain/models/User";
+import { TokenService } from "./common/data/TokenService";
+import { container } from "./di/container";
+import { JwtService } from "./common/data/JwtService";
 
 interface AuthContextType {
     user: User | null;

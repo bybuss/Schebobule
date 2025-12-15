@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuthViewModel } from "./AuthViewModel";
 import "./AuthPage.css";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../app/AuthContext";
+import { useAuth } from "../../AuthContext";
 
 export const AuthPage: React.FC = () => {
     const { model, intent } = useAuthViewModel();

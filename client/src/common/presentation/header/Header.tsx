@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "../../../app/AuthContext";
+import { useAuth } from "../../../AuthContext";
 import "./Header.css";
 
 export const Header: React.FC = () => {
