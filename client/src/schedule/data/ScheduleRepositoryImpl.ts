@@ -81,7 +81,7 @@ export class ScheduleRepositoryImpl implements ScheduleRepository {
         if (response.pairNumber !== undefined && response.pairNumber !== null) {
             pairNumber = Number(response.pairNumber);
         } else {
-            pairNumber = this.calculatePairNumberFromTime(response.startTime, response.endTime);
+            pairNumber = this.calculatePairNumberFromTime(response.startTime);
         }
         
         if (!isValidPairNumber(pairNumber)) {
@@ -101,17 +101,15 @@ export class ScheduleRepositoryImpl implements ScheduleRepository {
         };
     }
 
-    private calculatePairNumberFromTime(startTime: string, endTime: string): number {
+    private calculatePairNumberFromTime(startTime: string): number {
         try {
-            const start = new Date(startTime);
+            const date = new Date(startTime);
             
-            const localDate = new Date(start.toLocaleString('ru-RU'));
-            const hours = localDate.getHours();
-            const minutes = localDate.getMinutes();
-            
-            console.log(`[ScheduleRepositoryImpl] Local time from UTC ${startTime}: ${hours}:${minutes}`);
-            
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
             const totalMinutes = hours * 60 + minutes;
+            
+            console.log(`[ScheduleRepositoryImpl] Time calculation: ${hours}:${minutes} (${totalMinutes} minutes)`);
             
             if (totalMinutes >= 480 && totalMinutes < 570) return 1;
             if (totalMinutes >= 580 && totalMinutes < 670) return 2;
@@ -121,7 +119,7 @@ export class ScheduleRepositoryImpl implements ScheduleRepository {
             if (totalMinutes >= 1000 && totalMinutes < 1090) return 6;
             if (totalMinutes >= 1100 && totalMinutes < 1190) return 7;
             
-            return 1;
+            return -1;
         } catch (error) {
             console.error("[ScheduleRepositoryImpl] Error calculating pair number:", error);
             return 1;

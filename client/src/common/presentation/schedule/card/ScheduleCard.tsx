@@ -50,13 +50,10 @@ export const ScheduleCard: React.FC<ScheduleCardProps> = ({
             
             <div className="card-content">
                 {schedules.map((schedule) => {
-                    const pairNumber = schedule.pairNumber;
-                    const pairTime = getPairTime(pairNumber);
-                    
                     return (
                         <div key={schedule.id} className="pair-item">
                             <div className="pair-time">
-                                <span className="pair-number">Пара {pairNumber}</span>
+                                <span className="pair-number">Пара {schedule.pairNumber}</span>
                                 <span className="time-range">
                                     {formatDateTime(schedule.startTime)} - {formatDateTime(schedule.endTime)}
                                 </span>
